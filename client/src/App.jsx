@@ -9,6 +9,8 @@ import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import ForgotPasswordPage from "./Pages/ForgotPasswordPage";
 import ResetPasswordPage from "./Pages/ResetPasswordPage";
+import RegisterPage from "./Pages/RegisterPage";
+import Dashboard from "./Pages/Dashboard";
 
 const App = () => {
   return (
