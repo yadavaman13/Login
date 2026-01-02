@@ -1,7 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { authAPI } from "../services/api";
-import { Box, Eye, EyeOff, CheckCircle } from "lucide-react";
+import {
+  Lock,
+  Eye,
+  EyeOff,
+  CheckCircle2,
+  Info,
+  KeyRound,
+  Shield,
+} from "lucide-react";
 import "../Styles/auth.css";
 
 const ResetPasswordPage = () => {
@@ -133,129 +141,191 @@ const ResetPasswordPage = () => {
   };
 
   return (
-    <div className="auth-container">
-      <div className="auth-card">
-        {/* Header Section */}
-        <div className="auth-header">
-          <div className="logo-container">
-            <Box className="logo-icon" size={40} strokeWidth={2.5} />
-          </div>
-          <h1 className="auth-title">Set New Password</h1>
-          <p className="auth-subtitle">Please enter your new password</p>
-        </div>
+    <div className="auth-page">
+      {/* Background Decorations */}
+      <div className="auth-bg-shapes">
+        <div className="auth-shape auth-shape-1"></div>
+        <div className="auth-shape auth-shape-2"></div>
+        <div className="auth-shape auth-shape-3"></div>
+      </div>
 
-        {/* Success Message */}
-        {successMessage && (
-          <div
-            className="success-message"
-            style={{ display: "flex", alignItems: "center", gap: "8px" }}
-          >
-            <CheckCircle size={20} />
-            <div>
-              <p>{successMessage}</p>
-              <p style={{ fontSize: "14px", marginTop: "4px" }}>
-                Redirecting to login page...
-              </p>
+      <div className="auth-container">
+        <div className="auth-card animate-slide-up">
+          {/* Header Section */}
+          <div className="auth-header">
+            <div className="auth-icon-wrapper">
+              <Shield size={32} strokeWidth={2} />
             </div>
-          </div>
-        )}
-
-        {/* Error Message */}
-        {errors.submit && <div className="error-message">{errors.submit}</div>}
-
-        {/* Reset Password Form */}
-        <form onSubmit={handleSubmit} className="auth-form">
-          {/* Password Input */}
-          <div className="form-group">
-            <label htmlFor="password" className="form-label">
-              New Password
-            </label>
-            <div className="password-input-wrapper">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={`form-input ${errors.password ? "error" : ""}`}
-                placeholder="Enter new password"
-                disabled={isLoading || successMessage}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowPassword(!showPassword)}
-                disabled={isLoading || successMessage}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            {errors.password && (
-              <span className="error-text">{errors.password}</span>
-            )}
+            <h1 className="auth-title">Create New Password</h1>
+            <p className="auth-subtitle">
+              Enter a strong password to secure your account
+            </p>
           </div>
 
-          {/* Confirm Password Input */}
-          <div className="form-group">
-            <label htmlFor="confirmPassword" className="form-label">
-              Confirm Password
-            </label>
-            <div className="password-input-wrapper">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirmPassword"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                className={`form-input ${
-                  errors.confirmPassword ? "error" : ""
-                }`}
-                placeholder="Confirm new password"
-                disabled={isLoading || successMessage}
-              />
-              <button
-                type="button"
-                className="password-toggle"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                disabled={isLoading || successMessage}
-              >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            {errors.confirmPassword && (
-              <span className="error-text">{errors.confirmPassword}</span>
-            )}
-          </div>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="submit-btn"
-            disabled={isLoading || successMessage}
-          >
-            {isLoading ? (
-              <>
-                <span className="spinner"></span>
-                Resetting Password...
-              </>
-            ) : successMessage ? (
-              "Password Reset Successfully"
-            ) : (
-              "Reset Password"
-            )}
-          </button>
-
-          {/* Back to Login */}
-          {!successMessage && (
-            <div className="auth-footer">
-              <Link to="/login" className="auth-link">
-                Back to Login
-              </Link>
+          {/* Success Message */}
+          {successMessage && (
+            <div className="success-alert">
+              <div className="alert-icon">
+                <CheckCircle2 size={24} />
+              </div>
+              <div className="alert-content">
+                <h4 className="alert-title">Password Reset Successful!</h4>
+                <p className="alert-message">{successMessage}</p>
+                <p className="alert-subtext">Redirecting to login page...</p>
+              </div>
             </div>
           )}
-        </form>
+
+          {/* Error Message */}
+          {errors.submit && (
+            <div className="form-error-banner">
+              <Info size={20} />
+              {errors.submit}
+            </div>
+          )}
+
+          {/* Reset Password Form */}
+          <form onSubmit={handleSubmit} className="auth-form">
+            {/* Password Input */}
+            <div
+              className={`form-group ${
+                errors.password && touched.password
+                  ? "has-error"
+                  : formData.password && !errors.password && touched.password
+                  ? "is-valid"
+                  : ""
+              }`}
+            >
+              <label htmlFor="password" className="form-label">
+                <KeyRound size={16} />
+                New Password
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="form-input"
+                  placeholder="Enter your new password"
+                  disabled={isLoading || successMessage}
+                  autoComplete="new-password"
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading || successMessage}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+              {errors.password && touched.password && (
+                <span className="form-error">
+                  <Info size={14} />
+                  {errors.password}
+                </span>
+              )}
+            </div>
+
+            {/* Confirm Password Input */}
+            <div
+              className={`form-group ${
+                errors.confirmPassword && touched.confirmPassword
+                  ? "has-error"
+                  : formData.confirmPassword &&
+                    !errors.confirmPassword &&
+                    touched.confirmPassword
+                  ? "is-valid"
+                  : ""
+              }`}
+            >
+              <label htmlFor="confirmPassword" className="form-label">
+                <Lock size={16} />
+                Confirm Password
+              </label>
+              <div className="input-wrapper">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  className="form-input"
+                  placeholder="Confirm your new password"
+                  disabled={isLoading || successMessage}
+                  autoComplete="new-password"
+                />
+                <button
+                  type="button"
+                  className="password-toggle"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  disabled={isLoading || successMessage}
+                  tabIndex={-1}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {errors.confirmPassword && touched.confirmPassword && (
+                <span className="form-error">
+                  <Info size={14} />
+                  {errors.confirmPassword}
+                </span>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              className="auth-submit-btn"
+              disabled={isLoading || successMessage}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner"></span>
+                  Resetting Password...
+                </>
+              ) : successMessage ? (
+                <>
+                  <CheckCircle2 size={20} />
+                  Password Reset Successfully
+                </>
+              ) : (
+                <>
+                  <Shield size={20} />
+                  Reset Password
+                </>
+              )}
+            </button>
+
+            {/* Back to Login */}
+            {!successMessage && (
+              <div className="auth-footer">
+                <p
+                  style={{
+                    fontSize: "14px",
+                    color: "var(--gray-600)",
+                    marginBottom: "12px",
+                  }}
+                >
+                  Remember your password?
+                </p>
+                <Link to="/login" className="auth-link">
+                  Back to Login
+                </Link>
+              </div>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
