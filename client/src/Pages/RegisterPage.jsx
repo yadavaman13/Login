@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI } from '../Services/api';
 import { Box } from 'lucide-react';
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider } from '../config/firebase';
 import '../Styles/auth.css';
 
 const RegisterPage = () => {
@@ -203,57 +201,6 @@ const RegisterPage = () => {
             const errorMessage = error.response?.data?.message || 'Registration failed. Please try again.';
             setErrors(prev => ({
                 ...prev,
-                submit: errorMessage
-            }));
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const handleGoogleSignUp = async () => {
-        setIsLoading(true);
-        setErrors(prev => ({ ...prev, submit: '' }));
-        
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const user = result.user;
-            
-            // Get the Firebase ID token
-            const idToken = await user.getIdToken();
-            
-            // Store user info locally
-            const userData = {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName,
-                photoURL: user.photoURL,
-                emailVerified: user.emailVerified
-            };
-            
-            localStorage.setItem('token', idToken);
-            localStorage.setItem('user', JSON.stringify(userData));
-            localStorage.setItem('authProvider', 'google');
-            
-            // Redirect to dashboard
-            setTimeout(() => {
-                navigate('/dashboard');
-            }, 100);
-            
-        } catch (error) {
-            let errorMessage = 'Failed to sign up with Google. Please try again.';
-            
-            if (error.code === 'auth/popup-closed-by-user') {
-                errorMessage = 'Sign-up popup was closed. Please try again.';
-            } else if (error.code === 'auth/cancelled-popup-request') {
-                errorMessage = 'Sign-up was cancelled. Please try again.';
-            } else if (error.code === 'auth/popup-blocked') {
-                errorMessage = 'Pop-up was blocked by browser. Please allow pop-ups for this site.';
-            } else if (error.code === 'auth/account-exists-with-different-credential') {
-                errorMessage = 'An account already exists with this email using a different sign-in method.';
-            }
-            
-            setErrors(prev => ({ 
-                ...prev, 
                 submit: errorMessage
             }));
         } finally {
@@ -549,27 +496,6 @@ const RegisterPage = () => {
                                     </svg>
                                 </>
                             )}
-                        </button>
-
-                        {/* Divider */}
-                        <div className="auth-divider">
-                            <span>OR</span>
-                        </div>
-
-                        {/* Google Sign Up Button */}
-                        <button 
-                            type="button" 
-                            className="google-signin-btn"
-                            onClick={handleGoogleSignUp}
-                            disabled={isLoading}
-                        >
-                            <svg width="20" height="20" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M47.532 24.5528C47.532 22.9214 47.3997 21.2811 47.1175 19.6761H24.48V28.9181H37.4434C36.9055 31.8988 35.177 34.5356 32.6461 36.2111V42.2078H40.3801C44.9217 38.0278 47.532 31.8547 47.532 24.5528Z" fill="#4285F4"/>
-                                <path d="M24.48 48.0016C30.9529 48.0016 36.4116 45.8764 40.3888 42.2078L32.6549 36.2111C30.5031 37.675 27.7252 38.5039 24.4888 38.5039C18.2275 38.5039 12.9187 34.2798 11.0139 28.6006H3.03296V34.7825C7.10718 42.8868 15.4056 48.0016 24.48 48.0016Z" fill="#34A853"/>
-                                <path d="M11.0051 28.6006C9.99973 25.6199 9.99973 22.3922 11.0051 19.4115V13.2296H3.03298C-0.371021 20.0112 -0.371021 28.0009 3.03298 34.7825L11.0051 28.6006Z" fill="#FBBC04"/>
-                                <path d="M24.48 9.49932C27.9016 9.44641 31.2086 10.7339 33.6866 13.0973L40.5387 6.24523C36.2 2.17101 30.4414 -0.068932 24.48 0.00161733C15.4055 0.00161733 7.10718 5.11644 3.03296 13.2296L11.005 19.4115C12.901 13.7235 18.2187 9.49932 24.48 9.49932Z" fill="#EA4335"/>
-                            </svg>
-                            <span>Continue with Google</span>
                         </button>
                     </form>
 
