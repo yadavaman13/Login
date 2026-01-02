@@ -732,7 +732,6 @@
   }
 }
 
-<<<<<<< HEAD
 /* ============================================
    FORGOT & RESET PASSWORD STYLES
 ============================================ */
@@ -988,7 +987,8 @@
   background: rgba(113, 75, 103, 0.1);
   border-color: var(--primary);
   transform: translateY(-2px);
-=======
+}
+
 /* Auth Divider */
 .auth-divider {
   display: flex;
@@ -1048,5 +1048,4 @@
 
 .google-signin-btn svg {
   flex-shrink: 0;
->>>>>>> main
 }
