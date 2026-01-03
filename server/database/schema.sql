@@ -34,3 +34,10 @@ CREATE TABLE users (
 -- Password: Test123! (will be hashed in actual implementation)
 -- INSERT INTO users (email, name, phone, password) VALUES 
 -- ('test@example.com', 'Test User', '1234567890', '$2b$10$...');
+
+-- ============================================
+-- Sample Data (Optional - for testing)
+-- ============================================
+-- Password: Test123! (will be hashed in actual implementation)
+-- INSERT INTO users (email, name, phone, password) VALUES 
+-- ('test@example.com', 'Test User', '1234567890', '$2b$10$...');

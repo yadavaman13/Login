@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../config/firebase';
-import { signOut } from 'firebase/auth';
 
 const Dashboard = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState(null);
-    const [authProvider, setAuthProvider] = useState('');
 
     useEffect(() => {
         // Check if user is logged in
         const token = localStorage.getItem('token');
         const userData = localStorage.getItem('user');
-        const provider = localStorage.getItem('authProvider');
 
         if (!token || !userData) {
             navigate('/login');
@@ -20,26 +16,15 @@ const Dashboard = () => {
         }
 
         setUser(JSON.parse(userData));
-        setAuthProvider(provider || 'email');
     }, [navigate]);
 
-    const handleLogout = async () => {
-        try {
-            // If logged in with Google, sign out from Firebase
-            if (authProvider === 'google') {
-                await signOut(auth);
-            }
-            
-            // Clear local storage
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('authProvider');
-            
-            // Redirect to login
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout error:', error);
-        }
+    const handleLogout = () => {
+        // Clear local storage
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Redirect to login
+        navigate('/login');
     };
 
     if (!user) {
@@ -86,12 +71,9 @@ const Dashboard = () => {
                         />
                     )}
                     
-                    <p><strong>Name:</strong> {user.displayName || user.username || 'N/A'}</p>
+                    <p><strong>Name:</strong> {user.name || user.username || 'N/A'}</p>
                     <p><strong>Email:</strong> {user.email}</p>
-                    <p><strong>Authentication Method:</strong> {authProvider === 'google' ? 'Google' : 'Email/Password'}</p>
-                    {user.emailVerified !== undefined && (
-                        <p><strong>Email Verified:</strong> {user.emailVerified ? 'Yes' : 'No'}</p>
-                    )}
+                    <p><strong>Phone:</strong> {user.phone || 'N/A'}</p>
                 </div>
 
                 <button
