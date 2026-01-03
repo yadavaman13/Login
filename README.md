@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Login Application
 
 A full-stack authentication application with React frontend and Express.js backend with MySQL database.
